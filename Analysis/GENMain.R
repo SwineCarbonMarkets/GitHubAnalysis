@@ -1,6 +1,6 @@
 #==================================================================================================
 # Title:                 Anaerobic Digester Calculations: Generic
-# Date:                  3 February 2024
+# Date:                  17 February 2024
 #==================================================================================================
 rm(list=ls())
 library(FinCal)
@@ -140,6 +140,7 @@ output$prin              = NA
 output$pcarbon           = NA
 output$irr               = NA
 output$lifetime          = NA
+output$return            = NA
 output                   = output[0,]
 myoutput                 = list()
 #--------------------------------------------------------------------------------------------------
@@ -165,13 +166,14 @@ for(i in 1:nrow(sdf)){
                                    tempcfarm$co2use*tempsdf$pcarbon-
                                    0.05*tempcfarm$capitalad
      tempcfarm$investment     = tempcfarm$capitalad+tempcfarm$capitalbguse
+     tempcfarm$return         = tempcfarm$profit/tempcfarm$investment
      tempcfarm$irr            = NA
      for(k in 1:nrow(tempcfarm)){
           if(tempcfarm$profit[k]>2000){
                tempcfarm$irr[k]    = irr(c(-tempcfarm$investment[k],
                                            rep(tempcfarm$profit[k],tempsdf$lifetime)))}}
      tempcfarm                = tempcfarm[c("mms","ad","use","farmtype","head","temperature","irr",
-                                            "codigestate")]
+                                            "codigestate","return")]
      tempcfarm$pgas           = tempsdf$pgas
      tempcfarm$pelc           = tempsdf$pelc
      tempcfarm$prin           = tempsdf$prin

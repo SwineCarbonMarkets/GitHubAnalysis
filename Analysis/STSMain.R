@@ -1,6 +1,6 @@
 #==================================================================================================
 # Title:                 Anaerobic Digester Calculations - States
-# Date:                  3 February 2024
+# Date:                  17 February 2024
 #==================================================================================================
 rm(list=ls())
 library(FinCal)
@@ -138,9 +138,11 @@ for(i in 1:nrow(sdf)){
                                    tempcfarm$co2use*tempcfarm$pcarbon-
                                    0.05*tempcfarm$capitalad
      tempcfarm$investment     = tempcfarm$capitalad+tempcfarm$capitalbguse
+     tempcfarm$return         = tempcfarm$profit/tempcfarm$investment
      if(tempcfarm$profit>2000){
           tempcfarm$irr = irr(c(-tempcfarm$investment,rep(tempcfarm$profit,tempcfarm$lifetime)))}
      sdf$irr[i]               = tempcfarm$irr
+     sdf$return[i]            = tempcfarm$return
      print(i)}
 #--------------------------------------------------------------------------------------------------
 uses                     = data.frame(use=c("CNG","MTU","REC","UPI"),
@@ -148,7 +150,7 @@ uses                     = data.frame(use=c("CNG","MTU","REC","UPI"),
 sdf                      = merge(sdf,uses,by=c("use"))
 #--------------------------------------------------------------------------------------------------
 sdf                      = sdf[c("state","usename","level","pcarbon","lifetime","farmtype",
-                                 "head","irr")]
+                                 "head","irr","return")]
 rm(list=setdiff(ls(),"sdf"))
 #--------------------------------------------------------------------------------------------------
 save.image("STSResultsData.RData")
